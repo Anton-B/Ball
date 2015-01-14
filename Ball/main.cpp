@@ -18,36 +18,27 @@ public:
 		SgSelectPen(1, SgRGB(0, 0, 0));
 		SgSelectBrush(-1, SgRGB(255, 0, 0));
 		SgCircle(x, y, 20);
-		
 	}
 
 	void Direction(const int &x1, const int &y1, const int &x2, const int &y2, char &xD, char &yD)
 	{
-		if (xD == '+' && yD == '+')
+		if (xD == '+')
 		{
 			x = (x + 21 == x2) ? x - 1 : x + 1;
 			xD = (x + 21 == x2) ? '-' : '+';
-			y = (y + 21 == y2) ? y - 1 : y + 1;
-			yD = (y + 21 == y2) ? '-' : '+';
 		}
-		else if (xD == '+' && yD == '-')
-		{
-			x = (x + 21 == x2) ? x - 1 : x + 1;
-			xD = (x + 21 == x2) ? '-' : '+';
-			y = (y - 21 == y1) ? y + 1 : y - 1;
-			yD = (y - 21 == y1) ? '+' : '-';
-		}
-		else if (xD == '-' && yD == '+')
+		else
 		{
 			x = (x - 21 == x1) ? x + 1 : x - 1;
 			xD = (x - 21 == x1) ? '+' : '-';
+		}
+		if (yD == '+')
+		{
 			y = (y + 21 == y2) ? y - 1 : y + 1;
 			yD = (y + 21 == y2) ? '-' : '+';
 		}
-		else if (xD == '-' && yD == '-')
+		else
 		{
-			x = (x - 21 == x1) ? x + 1 : x - 1;
-			xD = (x - 21 == x1) ? '+' : '-';
 			y = (y - 21 == y1) ? y + 1 : y - 1;
 			yD = (y - 21 == y1) ? '+' : '-';
 		}
@@ -78,6 +69,6 @@ void main()
 		B.DrawBall();
 		B.Direction(x1Wall, y1Wall, x2Wall, y2Wall, xDirection, yDirection);
 		SgFlipPages();
-		SgPause(10);
+		SgPause(15);
 	}
 }
