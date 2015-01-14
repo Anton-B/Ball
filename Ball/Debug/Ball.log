@@ -1,4 +1,4 @@
 ﻿  main.cpp
-c:\users\anton\documents\visual studio 2013\projects\ball\ball\main.cpp(13): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-c:\users\anton\documents\visual studio 2013\projects\ball\ball\main.cpp(14): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+c:\users\anton\documents\visual studio 2013\projects\ball\ball\main.cpp(27): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+c:\users\anton\documents\visual studio 2013\projects\ball\ball\main.cpp(28): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
   Ball.vcxproj -> C:\Users\Anton\documents\visual studio 2013\Projects\Ball\Debug\Ball.exe

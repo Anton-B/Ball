@@ -3,72 +3,72 @@
 #include "graphics.h"
 using namespace std;
 
-class Ball
+struct Walls
+{
+	int x1Wall = 250, y1Wall = 150, x2Wall = 550, y2Wall = 550;
+
+	void DrawWalls()
+	{
+		SgSelectPen(2, SgRGB(0, 0, 0));
+		SgSelectBrush(HS_DIAGCROSS, SgRGB(0, 0, 0));
+		SgRectangle(x1Wall - 20, y1Wall - 20, x2Wall + 20, y2Wall + 20);
+		SgSelectBrush(-1, SgRGB(220, 220, 220));
+		SgRectangle(x1Wall, y1Wall, x2Wall, y2Wall);
+	}
+};
+
+class Ball : public Walls
 {
 private:
-	int x, y;
+	int x, y, xSpeed = 1, ySpeed = 1;
 public:
-	void setXY(const int &x1, const int &y1, const int &x2, const int &y2)
+	Ball()
 	{
-		x = x1 + (x2 - x1)*0.5;
-		y = y1 + (y2 - y1)*0.5;
+		x = x1Wall + (x2Wall - x1Wall)*0.5;
+		y = y1Wall + (y2Wall - y1Wall)*0.5;
 	}
-	void DrawBall()
+
+	void Render()
 	{
 		SgSelectPen(1, SgRGB(0, 0, 0));
 		SgSelectBrush(-1, SgRGB(255, 0, 0));
 		SgCircle(x, y, 20);
 	}
 
-	void Direction(const int &x1, const int &y1, const int &x2, const int &y2, char &xD, char &yD)
+	void Update()
 	{
-		if (xD == '+')
-		{
-			x = (x + 21 == x2) ? x - 1 : x + 1;
-			xD = (x + 21 == x2) ? '-' : '+';
-		}
-		else
-		{
-			x = (x - 21 == x1) ? x + 1 : x - 1;
-			xD = (x - 21 == x1) ? '+' : '-';
-		}
-		if (yD == '+')
-		{
-			y = (y + 21 == y2) ? y - 1 : y + 1;
-			yD = (y + 21 == y2) ? '-' : '+';
-		}
-		else
-		{
-			y = (y - 21 == y1) ? y + 1 : y - 1;
-			yD = (y - 21 == y1) ? '+' : '-';
-		}
+		UpdateSpeed();
+		x += xSpeed;
+		y += ySpeed;
+	}
+
+	void UpdateSpeed()
+	{
+		if (xSpeed == 1 && x + 21 == x2Wall)
+			xSpeed = -1;
+		else if (xSpeed == -1 && x - 21 == x1Wall)
+			xSpeed = 1;
+		if (ySpeed == 1 && y + 21 == y2Wall)
+			ySpeed = -1;
+		else if (ySpeed == -1 && y - 21 == y1Wall)
+			ySpeed = 1;
 	}
 };
-
-void Walls(const int &x1, const int &y1, const int &x2, const int &y2)
-{
-	SgSelectPen(2, SgRGB(0, 0, 0));
-	SgSelectBrush(HS_DIAGCROSS, SgRGB(0, 0, 0));
-	SgRectangle(x1-20, y1-20, x2+20, y2+20);
-	SgSelectBrush(-1, SgRGB(220, 220, 220));
-	SgRectangle(x1, y1, x2, y2);
-}
 
 void main()
 {
 	HWND hConsole = GetConsoleWindow();
 	ShowWindow(hConsole, 0);
-	int x1Wall = 250, y1Wall = 150, x2Wall = 550, y2Wall = 550;
-	char xDirection = '+', yDirection = '+';
+	Walls W;
 	Ball B;
-	B.setXY(x1Wall, y1Wall, x2Wall, y2Wall);
 	SgCreate(800, 800, "Ball");
 	while (SgIsActive()) {
 		SgClearScreen(sgRGB(220, 220, 220));
-		Walls(x1Wall, y1Wall, x2Wall, y2Wall);
-		B.DrawBall();
-		B.Direction(x1Wall, y1Wall, x2Wall, y2Wall, xDirection, yDirection);
+		W.DrawWalls();
+		B.Render();
+		B.Update();
 		SgFlipPages();
 		SgPause(15);
 	}
+	SgDestroy();
 }
