@@ -3,11 +3,12 @@
 #include "graphics.h"
 using namespace std;
 
-struct Walls
+class Ball
 {
-	int x1Wall = 250, y1Wall = 150, x2Wall = 550, y2Wall = 550;
+private:
+	int x, y, xSpeed = 1, ySpeed = 1, x1Wall = 250, y1Wall = 150, x2Wall = 550, y2Wall = 550;
 
-	void DrawWalls()
+	void RenderWalls()
 	{
 		SgSelectPen(2, SgRGB(0, 0, 0));
 		SgSelectBrush(HS_DIAGCROSS, SgRGB(0, 0, 0));
@@ -15,12 +16,14 @@ struct Walls
 		SgSelectBrush(-1, SgRGB(220, 220, 220));
 		SgRectangle(x1Wall, y1Wall, x2Wall, y2Wall);
 	}
-};
 
-class Ball : public Walls
-{
-private:
-	int x, y, xSpeed = 1, ySpeed = 1;
+	void UpdateSpeed()
+	{
+		if (x + 21 == x2Wall || x - 21 == x1Wall)
+			xSpeed *= -1;
+		if (y + 21 == y2Wall || y - 21 == y1Wall)
+			ySpeed *= -1;
+	}
 public:
 	Ball()
 	{
@@ -30,6 +33,7 @@ public:
 
 	void Render()
 	{
+		RenderWalls();
 		SgSelectPen(1, SgRGB(0, 0, 0));
 		SgSelectBrush(-1, SgRGB(255, 0, 0));
 		SgCircle(x, y, 20);
@@ -41,30 +45,16 @@ public:
 		x += xSpeed;
 		y += ySpeed;
 	}
-
-	void UpdateSpeed()
-	{
-		if (xSpeed == 1 && x + 21 == x2Wall)
-			xSpeed = -1;
-		else if (xSpeed == -1 && x - 21 == x1Wall)
-			xSpeed = 1;
-		if (ySpeed == 1 && y + 21 == y2Wall)
-			ySpeed = -1;
-		else if (ySpeed == -1 && y - 21 == y1Wall)
-			ySpeed = 1;
-	}
 };
 
 void main()
 {
 	HWND hConsole = GetConsoleWindow();
 	ShowWindow(hConsole, 0);
-	Walls W;
 	Ball B;
 	SgCreate(800, 800, "Ball");
 	while (SgIsActive()) {
 		SgClearScreen(sgRGB(220, 220, 220));
-		W.DrawWalls();
 		B.Render();
 		B.Update();
 		SgFlipPages();
